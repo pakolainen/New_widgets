@@ -68,7 +68,7 @@ function reloadWidget()
  if lastWidgetBasename then
   for name, widget in pairs(widgetHandler.knownWidgets) do
     --Spring.Echo(widget.filename)
-				if (widget.filename == lastWidgetBasename) then
+				if (lastWidgetBasename:find(widget.filename)) then
 					lastWidget = name
 					lastWidgetBasename = nil
 				end
@@ -97,12 +97,18 @@ end
 
 
 local remStr = "Removed:"
+local remwStr = "Removed widget:"
 local loadStr ="Loading:"
 local errorIn = "Error in"
 --Error in GameFrame(): [string "LuaUI/Widgets/ddd.lua"]:314: attempt to index upvalue 'file' (a nil value)
 function widget:AddConsoleLine(msg, priority)
-  if (string.find (msg, remStr) or string.find (msg, loadStr)) then
-    lastWidgetBasename = string.sub(msg, string.len(remStr)+3)
+  local wid
+  if (msg:find (remStr)then
+    lastWidgetBasename = string.sub(msg, string.len(remStr)+1)
+  elseif msg:find (loadStr))then
+    lastWidgetBasename = string.sub(msg, string.len(loadStr)+1)
+  elseif msg:find(remwStr) then
+    lastWidgetBasename = string.sub(msg, string.len(remwStr)+1)
   elseif (string.find (string.sub(msg, 1, 15), errorIn)) then
     local longbytes = VFS.UnpackU32(msg,1,string.len(msg)/4)
     local crc = math.bit_xor(0, unpack(longbytes))
